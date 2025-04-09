@@ -32,6 +32,7 @@ from docx import Document
 from langchain.output_parsers import CommaSeparatedListOutputParser
 from langchain import LLMChain
 import datetime
+import pandas as pd
 import constants as ct
 
 
@@ -588,3 +589,68 @@ def adjust_string(s):
     
     # OSがWindows以外の場合はそのまま返す
     return s
+
+
+def find_relevant_employees(param):
+    """
+    従業員情報から特定のキーワードに関連する可能性がある従業員を検索するTool設定用の関数
+    Args:
+        param: ユーザー入力値（検索キーワード）
+    Returns:
+        LLMからの回答（関連する従業員の情報）
+    """
+    logger = logging.getLogger(ct.LOGGER_NAME)
+    try:
+        # CSVファイルを読み込む
+        df = pd.read_csv(ct.EMPLOYEE_FILE_PATH, encoding=ct.CSV_ENCODING)
+        
+        # 従業員情報から検索キーワードに関連する人を探す（部署、役職、保有資格、主要業務、対応カテゴリを検索）
+        search_columns = ['部署', '役職', '保有資格', '現在の主要業務', '対応可能な問い合わせカテゴリ']
+        
+        # パラメータが空でないことを確認
+        if not param or param.strip() == "":
+            result = "検索キーワードを入力してください。"
+            st.session_state.chat_history.extend([HumanMessage(content=param), AIMessage(content=result)])
+            return result
+            
+        # 検索キーワードが含まれる従業員を抽出
+        relevant_employees = []
+        
+        for _, row in df.iterrows():
+            for col in search_columns:
+                if isinstance(row[col], str) and param.lower() in row[col].lower():
+                    employee_info = {
+                        "従業員ID": row["従業員ID"],
+                        "名前": row["名前"],
+                        "部署": row["部署"],
+                        "役職": row["役職"],
+                        "保有資格": row["保有資格"],
+                        "現在の主要業務": row["現在の主要業務"],
+                        "対応可能な問い合わせカテゴリ": row["対応可能な問い合わせカテゴリ"]
+                    }
+                    if employee_info not in relevant_employees:
+                        relevant_employees.append(employee_info)
+                    break
+        
+        # 結果の整形
+        if relevant_employees:
+            result = f"キーワード「{param}」に関連する情報を持っている可能性がある従業員は以下の通りです：\n\n"
+            for emp in relevant_employees:
+                result += f"**{emp['名前']}**（{emp['従業員ID']}）\n"
+                result += f"- 部署: {emp['部署']}\n"
+                result += f"- 役職: {emp['役職'] if emp['役職'] != 'なし' else '役職なし'}\n"
+                result += f"- 保有資格: {emp['保有資格']}\n"
+                result += f"- 主要業務: {emp['現在の主要業務']}\n"
+                result += f"- 対応カテゴリ: {emp['対応可能な問い合わせカテゴリ']}\n\n"
+        else:
+            result = f"キーワード「{param}」に関連する従業員は見つかりませんでした。別のキーワードで試してください。"
+        
+        # 会話履歴への追加
+        st.session_state.chat_history.extend([HumanMessage(content=f"キーワード「{param}」に関連する従業員を検索"), AIMessage(content=result)])
+        return result
+        
+    except Exception as e:
+        error_msg = f"従業員情報の検索中にエラーが発生しました: {str(e)}"
+        logger.error(error_msg)
+        st.session_state.chat_history.extend([HumanMessage(content=param), AIMessage(content=error_msg)])
+        return error_msg

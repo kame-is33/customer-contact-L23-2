@@ -117,6 +117,8 @@ SEARCH_CUSTOMER_COMMUNICATION_INFO_TOOL_NAME = "search_customer_communication_to
 SEARCH_CUSTOMER_COMMUNICATION_INFO_TOOL_DESCRIPTION = "顧客とのやりとりに関する情報を参照したい時に使う"
 SEARCH_WEB_INFO_TOOL_NAME = "search_web_tool"
 SEARCH_WEB_INFO_TOOL_DESCRIPTION = "自社サービス「HealthX」に関する質問で、Web検索が必要と判断した場合に使う"
+SEARCH_EMPLOYEE_INFO_TOOL_NAME = "search_employee_info_tool"
+SEARCH_EMPLOYEE_INFO_TOOL_DESCRIPTION = "特定の情報（キーワード）を知っている可能性が高い従業員を検索したい時に使う"
 
 
 # ==========================================
