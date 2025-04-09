@@ -96,14 +96,11 @@ AI_AGENT_MAX_ITERATIONS = 5
 
 DB_SERVICE_PATH = "./.db_service"
 DB_CUSTOMER_PATH = "./.db_customer"
-# 組織図検索ツール用データベースパスの追加
-DB_ORG_CHART_PATH = "./.db_org_chart"
 
 DB_NAMES = {
     DB_COMPANY_PATH: f"{RAG_TOP_FOLDER_PATH}/company",
     DB_SERVICE_PATH: f"{RAG_TOP_FOLDER_PATH}/service",
-    DB_CUSTOMER_PATH: f"{RAG_TOP_FOLDER_PATH}/customer",
-    DB_ORG_CHART_PATH: f"{RAG_TOP_FOLDER_PATH}/org_chart"
+    DB_CUSTOMER_PATH: f"{RAG_TOP_FOLDER_PATH}/customer"
 }
 
 AI_AGENT_MODE_ON = "利用する"
@@ -120,9 +117,6 @@ SEARCH_CUSTOMER_COMMUNICATION_INFO_TOOL_NAME = "search_customer_communication_to
 SEARCH_CUSTOMER_COMMUNICATION_INFO_TOOL_DESCRIPTION = "顧客とのやりとりに関する情報を参照したい時に使う"
 SEARCH_WEB_INFO_TOOL_NAME = "search_web_tool"
 SEARCH_WEB_INFO_TOOL_DESCRIPTION = "自社サービス「HealthX」に関する質問で、Web検索が必要と判断した場合に使う"
-# 組織図検索ツール関連の定数を追加
-SEARCH_ORG_CHART_TOOL_NAME = "search_org_chart_tool"
-SEARCH_ORG_CHART_TOOL_DESCRIPTION = "組織構造や部署間の関係性、役職者情報を検索したい時に使う"
 
 
 # ==========================================

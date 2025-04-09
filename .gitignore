@@ -166,6 +166,5 @@ cython_debug/
 .db_company/
 .db_customer/
 .db_service/
-.db_org_chart/
 .chroma/
 logs/
